@@ -13,6 +13,20 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/info`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "GetList",
+			Router: `/list`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
 		beego.ControllerComments{
 			Method: "GetFeeds",

@@ -1,4 +1,5 @@
 *.rdb
+*.tmp
 tests/
 github.com/
 golang.org/
@@ -6,3 +7,4 @@ gopkg.in/
 sourcegraph.com/
 poetry/static/pic/
 poetry/swagger
+poetry/poetry

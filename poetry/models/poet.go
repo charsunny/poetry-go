@@ -25,4 +25,5 @@ type Poet struct {
     Desc string `orm:"column(description_cn)"`
     Poems []*Poem   `orm:"reverse(many)" json:",omitempty"`
     LikeUsers []*User `orm:"reverse(many)" json:",omitempty"`
+    Columns []*Column `orm:"reverse(many)" json:",omitempty"`
 }

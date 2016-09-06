@@ -14,6 +14,7 @@ type Comment struct {
     Comment *Comment`orm:"rel(fk)"`           // 评论别的评论
     RComments []*Comment`orm:"reverse(many)" json:"-"` // 这个评论被别的评论评论
     User *User `orm:"rel(fk)"`
+    Column *Column `orm:"rel(fk)"`
     Time string 
     Content string 
     Picture string
