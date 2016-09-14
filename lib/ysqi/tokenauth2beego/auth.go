@@ -2,7 +2,7 @@
 // Example:
 //	import(
 //		"github.com/astaxie/beego"
-//		"lib/ysqi/tokenauth2beego/o2o"
+//		"github.com/ysqi/tokenauth2beego/o2o"
 //	)
 //
 //	func main(){
@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"lib/keycrypt"
 	"strconv"
 	"strings"
 	"syscall"
@@ -77,6 +78,7 @@ func Init(key string) (err error) {
 					return
 				}
 				if pass, ok := m["auth"]; ok && len(pass) > 0 {
+					pass, err = keycrypt.Decode(key, pass)
 					if err != nil {
 						return
 					}

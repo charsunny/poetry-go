@@ -1,5 +1,7 @@
 *.rdb
 *.tmp
+*.conf
+poetry/poetry
 tests/
 github.com/
 golang.org/

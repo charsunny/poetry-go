@@ -15,16 +15,72 @@ func init() {
 
 	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
 		beego.ControllerComments{
-			Method: "Get",
-			Router: `/info`,
+			Method: "GetColumn",
+			Router: `/:id`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
 		beego.ControllerComments{
-			Method: "GetList",
-			Router: `/list`,
+			Method: "GetUserColumns",
+			Router: `/user`,
 			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "GetUserFavColumns",
+			Router: `/userfav`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "UpdateColumnItem",
+			Router: `/updateitem`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "GetColumnComments",
+			Router: `/comments`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "GetColumnUsers",
+			Router: `/favusers`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "UpdateFavColumn",
+			Router: `/updatefav`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "CreateColumn",
+			Router: `/create`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "DeleteColumn",
+			Router: `/delete`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
+		beego.ControllerComments{
+			Method: "ColumnAddComment",
+			Router: `/addcomment`,
+			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
@@ -32,6 +88,27 @@ func init() {
 			Method: "GetFeeds",
 			Router: `/list`,
 			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:MessageController"] = append(beego.GlobalControllerRouter["poetry/controllers:MessageController"],
+		beego.ControllerComments{
+			Method: "GetMessage",
+			Router: `/:id`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:MessageController"] = append(beego.GlobalControllerRouter["poetry/controllers:MessageController"],
+		beego.ControllerComments{
+			Method: "GetMessageList",
+			Router: `/list`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:MessageController"] = append(beego.GlobalControllerRouter["poetry/controllers:MessageController"],
+		beego.ControllerComments{
+			Method: "DeleteMessage",
+			Router: `/delete`,
+			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:ObjectController"] = append(beego.GlobalControllerRouter["poetry/controllers:ObjectController"],

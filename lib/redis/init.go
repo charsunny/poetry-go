@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"lib/keycrypt"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -14,6 +15,7 @@ func Init(key string) (err error) {
 	poolsize, _ := beego.AppConfig.Int("redis::poolsize")
 	timeout, _ := beego.AppConfig.Int("redis::timeout")
 	if len(key) > 0 && len(auth) > 0 {
+		auth, err = keycrypt.Decode(key, auth)
 		if err != nil {
 			return
 		}

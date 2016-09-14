@@ -1,29 +1,36 @@
 package models
 
 import (
-    "github.com/astaxie/beego/orm"
-    "github.com/astaxie/beego"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
-func init()  {
-    orm.RegisterModel(new(Period), new(Poet))
-    beego.Debug("init model poet")
+func init() {
+	orm.RegisterModel(new(Period), new(Poet))
+	beego.Debug("init model poet")
 }
 
 type Period struct {
-    Id int 
-    NameCn string
+	Id     int
+	NameCn string
 }
 
 type Poet struct {
-    Id int
-    NameCn string `json:"Name"`
-    Avatar string 
-    LikeCount int 
-    Period string `orm:"-"` 
-    PeriodId int `json:"-"`
-    Desc string `orm:"column(description_cn)"`
-    Poems []*Poem   `orm:"reverse(many)" json:",omitempty"`
-    LikeUsers []*User `orm:"reverse(many)" json:",omitempty"`
-    Columns []*Column `orm:"reverse(many)" json:",omitempty"`
+	Id        int
+	NameCn    string `json:"Name"`
+	Avatar    string
+	LikeCount int
+	Period    string    `orm:"-"`
+	PeriodId  int       `json:"-"`
+	Desc      string    `orm:"column(description_cn)"`
+	Poems     []*Poem   `orm:"reverse(many)" json:",omitempty"`
+	LikeUsers []*User   `orm:"reverse(many)" json:",omitempty"`
+	Columns   []*Column `orm:"reverse(many)" json:",omitempty"`
+}
+
+func GetPoet(pid int) (p *Poet, err error) {
+	p = new(Poet)
+	p.Id = pid
+	err = orm.NewOrm().Read(p)
+	return
 }

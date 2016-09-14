@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"strconv"
 	"poetry/models"
+	"strconv"
+
 	"github.com/astaxie/beego"
 )
 
@@ -21,7 +22,7 @@ func (u *UserController) Post() {
 	var user models.User
 	user.Avatar = u.GetString("avatar")
 	user.UserId = u.GetString("uid")
-	user.Gender, _  = u.GetInt("gender")
+	user.Gender, _ = u.GetInt("gender")
 	user.Nick = u.GetString("nick")
 	models.AddUser(&user)
 	u.ReplySucc(user)
@@ -48,18 +49,18 @@ func (u *UserController) Get() {
 // @Failure 403 :uid is empty
 // @router /pic [post]
 func (c *UserController) UploadPic() {
-        f, h, err := c.GetFile("image")
-        if err == nil {
-                path := "./static/pic/" + h.Filename
-                f.Close()
-                err = c.SaveToFile("image", path)
-        }
-        path := beego.AppConfig.String("domain") + "static/pic/" + h.Filename
-		if err == nil {
-			c.ReplySucc(path)
-		} else {
-			c.ReplyErr(err)
-		}
+	f, h, err := c.GetFile("image")
+	if err == nil {
+		path := "./static/pic/" + h.Filename
+		f.Close()
+		err = c.SaveToFile("image", path)
+	}
+	path := beego.AppConfig.String("domain") + "static/pic/" + h.Filename
+	if err == nil {
+		c.ReplySucc(path)
+	} else {
+		c.ReplyErr(err)
+	}
 }
 
 // @Title Update
@@ -106,13 +107,13 @@ func (u *UserController) GetFeeds() {
 	}
 	page, _ := u.GetInt("page")
 	fid, _ := u.GetInt("fid")
-    beego.Debug(page)
-    var list []*models.Feed
-    if fid > 0 {
-        list, err = models.GetFeedsAfter(fid)
-    } else if fid < 0 {
-        list = []*models.Feed { }
-    } else {
+	beego.Debug(page)
+	var list []*models.Feed
+	if fid > 0 {
+		list, err = models.GetFeedsAfter(fid)
+	} else if fid < 0 {
+		list = []*models.Feed{}
+	} else {
 		list, err = models.GetUserFeeds(uid, page)
 	}
 	if err != nil {
@@ -162,4 +163,3 @@ func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
 	u.ServeJSON()
 }
-
