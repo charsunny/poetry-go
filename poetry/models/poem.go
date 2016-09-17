@@ -25,6 +25,7 @@ type Poem struct {
     Recommands []*Recommand `orm:"reverse(many)" json:"-"`
     LikeUsers []*User `orm:"reverse(many)" json:"-"`
     Columns []*Column `orm:"reverse(many)" json:",omitempty"`   // 收藏的相关专辑
+    Excerpts []*Excerpt `orm:"reverse(many)" json:"-"`          // 关联的摘抄
 }
 
 func GetPoem(pid int) (p *Poem, err error) {

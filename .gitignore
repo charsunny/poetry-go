@@ -1,6 +1,6 @@
 *.rdb
 *.tmp
-*.conf
+poetry/conf/*.conf
 poetry/poetry
 tests/
 github.com/
