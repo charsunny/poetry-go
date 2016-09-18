@@ -169,6 +169,13 @@ func init() {
 
 	beego.GlobalControllerRouter["poetry/controllers:RecommandController"] = append(beego.GlobalControllerRouter["poetry/controllers:RecommandController"],
 		beego.ControllerComments{
+			Method: "GetToday",
+			Router: `/today`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:RecommandController"] = append(beego.GlobalControllerRouter["poetry/controllers:RecommandController"],
+		beego.ControllerComments{
 			Method: "Get",
 			Router: `/info`,
 			AllowHTTPMethods: []string{"get"},

@@ -16,3 +16,27 @@ type Excerpt struct {
 	Content string // 内容
 	Poem    *Poem  `orm:"rel(fk)"` // 关联诗词
 }
+
+func GetTodayRecommand(id int) (rec *Excerpt, hasNew bool) {
+	rec = new(Excerpt)
+	o := orm.NewOrm()
+	err := o.QueryTable("Excerpt").OrderBy("-id").Limit(1).One(rec)
+	if err != nil {
+		hasNew = false
+		return
+	}
+	if id == rec.Id {
+		hasNew = false
+	} else {
+		hasNew = true
+		o.LoadRelated(rec, "Poem")
+		if rec.Poem != nil {
+			rec.Poem.TextCn = ""
+			o.LoadRelated(rec.Poem, "Poet")
+			if rec.Poem.Poet != nil {
+				rec.Poem.Poet.Desc = ""
+			}
+		}
+	}
+	return
+}

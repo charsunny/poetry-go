@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"poetry/models"
 )
 
@@ -9,6 +10,22 @@ type RecommandController struct {
 	BaseController
 }
 
+// @Title Get Recommand today info
+// @Description get recommd by rid
+// @Param	rid	 query 	int	false		"The key for Recommand, = 0 get last"
+// @Success 200 {object} models.Recommand
+// @Failure 403 :uid is empty
+// @router /today [get]
+func (u *RecommandController) GetToday() {
+	id, _ := u.GetInt("id")
+	rec, hasNew := models.GetTodayRecommand(id)
+	if !hasNew {
+		err := errors.New("没有推荐诗词")
+		u.ReplyErr(err)
+	} else {
+		u.ReplySucc(rec)
+	}
+}
 
 // @Title Get Recommand Info
 // @Description get recommd by rid
@@ -19,11 +36,11 @@ type RecommandController struct {
 func (u *RecommandController) Get() {
 	rid, _ := u.GetInt("rid")
 	rec, err := models.GetRecommand(rid)
-    if err != nil {
-        u.ReplyErr(err)
-    } else {
-        u.ReplySucc(rec)
-    }
+	if err != nil {
+		u.ReplyErr(err)
+	} else {
+		u.ReplySucc(rec)
+	}
 }
 
 // @Title  Get Recommand List
@@ -35,10 +52,9 @@ func (u *RecommandController) Get() {
 func (u *RecommandController) GetList() {
 	page, _ := u.GetInt("page")
 	list, err := models.GetRecommandList(page)
-	 if err != nil {
-        u.ReplyErr(err)
-    } else {
-        u.ReplySucc(list)
-    }
+	if err != nil {
+		u.ReplyErr(err)
+	} else {
+		u.ReplySucc(list)
+	}
 }
-

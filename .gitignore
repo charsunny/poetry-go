@@ -10,3 +10,13 @@ sourcegraph.com/
 poetry/static/pic/
 poetry/swagger
 poetry/poetry
+
+poetry/lastupdate.tmp
+
+poetry/poetry
+
+poetry/poetry
+
+poetry/conf/app.conf
+
+*.conf
