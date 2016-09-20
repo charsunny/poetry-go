@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
 )
 
 // Operations about Users
@@ -21,9 +23,10 @@ type ColumnController struct {
 // @router /:id [get]
 func (c *ColumnController) GetColumn() {
 	id := c.GetString(":id")
+	page, _ := c.GetInt("page")
 	if id != "" {
 		cid, _ := strconv.Atoi(id)
-		col, err := models.GetColumnDetail(cid)
+		col, err := models.GetColumnDetail(cid, page)
 		if err != nil {
 			c.ReplyErr(err)
 		} else {
@@ -48,25 +51,34 @@ func (c *ColumnController) GetUserColumns() {
 		c.ReplyErr(err)
 	} else {
 		if len(list) == 0 {
+			user, err := models.GetUser(uid)
+			if err != nil {
+				c.ReplyErr(err)
+				return
+			}
 			// do create default list action
 			col := new(models.Column)
 			col.Title = "喜欢的诗词"
 			col.Desc = "喜欢的诗词"
 			col.Type = 0
 			col.Default = true
-			col, err := models.AddColumn(col)
-			if err != nil {
+			col.User = user
+			col, err = models.AddColumn(col)
+			if err == nil {
 				list = append(list, col)
 			}
+			beego.Debug(err)
 			col = new(models.Column)
 			col.Title = "喜欢的诗人"
 			col.Desc = "喜欢的诗人"
 			col.Type = 1
 			col.Default = true
+			col.User = user
 			col, err = models.AddColumn(col)
-			if err != nil {
+			if err == nil {
 				list = append(list, col)
 			}
+			beego.Debug(err)
 		}
 		c.ReplySucc(list)
 	}
@@ -93,7 +105,7 @@ func (c *ColumnController) GetUserFavColumns() {
 // @Param	rid	 query 	int	false		"The key for Recommand, = 0 get last"
 // @Success 200 {object} models.Recommand
 // @Failure 403 :uid is empty
-// @router /updateitem [get]
+// @router /updateitem [post]
 func (c *ColumnController) UpdateColumnItem() {
 	pid, _ := c.GetInt("pid")
 	cid, _ := c.GetInt("cid")

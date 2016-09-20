@@ -21,7 +21,7 @@ func (c *MessageController) GetMessage() {
 	id := c.GetString(":id")
 	if id != "" {
 		cid, _ := strconv.Atoi(id)
-		col, err := models.GetColumnDetail(cid)
+		col, err := models.GetColumnDetail(cid, 0)
 		if err != nil {
 			c.ReplyErr(err)
 		} else {

@@ -40,6 +40,11 @@ func init() {
 				&controllers.UserController{},
 			),
 		),
+		beego.NSNamespace("/col",
+			beego.NSInclude(
+				&controllers.ColumnController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

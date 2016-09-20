@@ -39,12 +39,38 @@ func GetColumn(id int) (column *Column, err error) {
 	return
 }
 
-func GetColumnDetail(id int) (column *Column, err error) {
+func GetColumnDetail(id int, page int) (column *Column, err error) {
 	column, err = GetColumn(id)
+	if err != nil {
+		return
+	}
 	o := orm.NewOrm()
+	if column.Type == 0 {
+		o.LoadRelated(column, "Poems")
+		if column.Poems != nil {
+			ct := 20
+			if page*20+20 > len(column.Poems) {
+				ct = len(column.Poems) - page*20
+			}
+			if ct < 0 {
+				ct = 0
+			}
+			column.Poems = column.Poems[page*20 : ct]
+		}
+	} else {
+		o.LoadRelated(column, "Poets")
+		if column.Poets != nil {
+			ct := 20
+			if page*20+20 > len(column.Poets) {
+				ct = len(column.Poets) - page*20
+			}
+			if ct < 0 {
+				ct = 0
+			}
+			column.Poets = column.Poets[page*20 : ct]
+		}
+	}
 	o.LoadRelated(column, "User")
-	o.LoadRelated(column, "Poets")
-	o.LoadRelated(column, "Poems")
 	return
 }
 

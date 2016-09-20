@@ -38,7 +38,7 @@ func init() {
 		beego.ControllerComments{
 			Method: "UpdateColumnItem",
 			Router: `/updateitem`,
-			AllowHTTPMethods: []string{"get"},
+			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
