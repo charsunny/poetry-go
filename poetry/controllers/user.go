@@ -43,26 +43,6 @@ func (u *UserController) Get() {
 	u.ServeJSON()
 }
 
-// @Title Upload image to server
-// @Description get user by uid
-// @Success 200 {object} models.User
-// @Failure 403 :uid is empty
-// @router /pic [post]
-func (c *UserController) UploadPic() {
-	f, h, err := c.GetFile("image")
-	if err == nil {
-		path := "./static/pic/" + h.Filename
-		f.Close()
-		err = c.SaveToFile("image", path)
-	}
-	path := beego.AppConfig.String("domain") + "static/pic/" + h.Filename
-	if err == nil {
-		c.ReplySucc(path)
-	} else {
-		c.ReplyErr(err)
-	}
-}
-
 // @Title Update
 // @Description update the user
 // @Param	uid		path 	string	true		"The uid you want to update"

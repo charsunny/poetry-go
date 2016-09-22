@@ -13,6 +13,13 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["poetry/controllers:BaseController"] = append(beego.GlobalControllerRouter["poetry/controllers:BaseController"],
+		beego.ControllerComments{
+			Method: "UploadPic",
+			Router: `/pic`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
 		beego.ControllerComments{
 			Method: "GetColumn",
@@ -88,6 +95,34 @@ func init() {
 			Method: "GetFeeds",
 			Router: `/list`,
 			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
+		beego.ControllerComments{
+			Method: "GetFeedComments",
+			Router: `/comments`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
+		beego.ControllerComments{
+			Method: "GetFeedFavUsers",
+			Router: `/favusers`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
+		beego.ControllerComments{
+			Method: "DeleteFeed",
+			Router: `/delete`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:FeedController"] = append(beego.GlobalControllerRouter["poetry/controllers:FeedController"],
+		beego.ControllerComments{
+			Method: "FeedAddComment",
+			Router: `/addcomment`,
+			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:MessageController"] = append(beego.GlobalControllerRouter["poetry/controllers:MessageController"],
@@ -200,13 +235,6 @@ func init() {
 			Method: "Get",
 			Router: `/:uid`,
 			AllowHTTPMethods: []string{"get"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["poetry/controllers:UserController"] = append(beego.GlobalControllerRouter["poetry/controllers:UserController"],
-		beego.ControllerComments{
-			Method: "UploadPic",
-			Router: `/pic`,
-			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:UserController"] = append(beego.GlobalControllerRouter["poetry/controllers:UserController"],

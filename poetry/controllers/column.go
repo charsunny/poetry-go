@@ -222,6 +222,16 @@ func (c *ColumnController) UpdateFavColumn() {
 // @Failure 403 :uid is not int
 // @router /create [post]
 func (c *ColumnController) CreateColumn() {
+	uid, err := c.GetInt("uid")
+	if err != nil {
+		c.ReplyErr(err)
+		return
+	}
+	user, err := models.GetUser(uid)
+	if err != nil {
+		c.ReplyErr(err)
+		return
+	}
 	name := c.GetString("name")
 	desc := c.GetString("desc")
 	image := c.GetString("image")
@@ -232,7 +242,8 @@ func (c *ColumnController) CreateColumn() {
 	col.Desc = desc
 	col.Image = image
 	col.Type = tp
-	col, err := models.AddColumn(col)
+	col.User = user
+	col, err = models.AddColumn(col)
 	if err != nil {
 		c.ReplyErr(err)
 	} else {
