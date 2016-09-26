@@ -81,6 +81,11 @@ func (u *UserController) AddFeed() {
 // @router /feeds [get]
 func (u *UserController) GetFeeds() {
 	uid, err := u.GetInt("uid")
+	id, _ := u.GetInt("id")
+	if id > 0 {
+		uid = id
+	}
+	beego.Debug(uid)
 	if err != nil {
 		u.ReplyErr(err)
 		return

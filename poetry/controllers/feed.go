@@ -1,10 +1,6 @@
 package controllers
 
-import (
-	"poetry/models"
-
-	"github.com/astaxie/beego"
-)
+import "poetry/models"
 
 // Operations about Users
 type FeedController struct {
@@ -22,11 +18,6 @@ func (c *FeedController) GetFeeds() {
 	page, _ := c.GetInt("page")
 	fid, _ := c.GetInt("fid")
 	uid, _ := c.GetInt("uid")
-	id, _ := c.GetInt("id")
-	if id > 0 {
-		uid = id
-	}
-	beego.Debug(page)
 	var list []*models.Feed
 	var err error
 	if fid > 0 {
