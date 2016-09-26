@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"poetry/models"
-	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -22,6 +21,11 @@ type FeedController struct {
 func (c *FeedController) GetFeeds() {
 	page, _ := c.GetInt("page")
 	fid, _ := c.GetInt("fid")
+	uid, _ := c.GetInt("uid")
+	id, _ := c.GetInt("id")
+	if id > 0 {
+		uid = id
+	}
 	beego.Debug(page)
 	var list []*models.Feed
 	var err error
@@ -30,7 +34,7 @@ func (c *FeedController) GetFeeds() {
 	} else if fid < 0 {
 		list = []*models.Feed{}
 	} else {
-		list, err = models.GetFeeds(page)
+		list, err = models.GetFeeds(uid, page)
 	}
 	if err != nil {
 		c.ReplyErr(err)
@@ -48,8 +52,9 @@ func (c *FeedController) GetFeeds() {
 // @router /comments [get]
 func (c *FeedController) GetFeedComments() {
 	page, _ := c.GetInt("page")
-	cid, _ := c.GetInt("cid")
-	list, err := models.GetColumnComments(page, cid)
+	cid, _ := c.GetInt("fid")
+	uid, _ := c.GetInt("uid")
+	list, err := models.GetFeedComments(page, cid, uid)
 	if err != nil {
 		c.ReplyErr(err)
 	} else {
@@ -88,41 +93,5 @@ func (c *FeedController) DeleteFeed() {
 		c.ReplyErr(err)
 	} else {
 		c.ReplySucc("OK")
-	}
-}
-
-// @Title  add comment
-// @Description update the user
-// @Param	page		query 	int	true		"The page you want to get, default is 0"
-// @Success 200 {object} models.User
-// @Failure 403 :uid is not int
-// @router /addcomment [post]
-func (c *FeedController) FeedAddComment() {
-	cid, _ := c.GetInt("cid") // 评论的id
-	id, _ := c.GetInt("id")   // 专辑的id
-	uid, _ := c.GetInt("uid")
-	user, err := models.GetUser(uid)
-
-	content := c.GetString("content")
-
-	col, err := models.GetColumn(id)
-
-	if err != nil {
-		c.ReplyErr(err)
-	} else {
-		comment := new(models.Comment)
-		comment.Content = content
-		comment.Time = time.Now().Format("2006-01-02 15:04:045")
-		if cid > 0 {
-			comment.Comment = &models.Comment{Id: cid}
-		}
-		comment.User = user
-		comment.Column = col
-		err = models.ColumnAddComment(col, comment)
-		if err != nil {
-			c.ReplyErr(err)
-		} else {
-			c.ReplySucc(comment)
-		}
 	}
 }

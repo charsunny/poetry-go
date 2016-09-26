@@ -74,9 +74,10 @@ func GetColumnDetail(id int, page int) (column *Column, err error) {
 	return
 }
 
-func GetColumnComments(page int, id int) (list []*Comment, err error) {
+func GetColumnComments(page int, id int, uid int) (list []*Comment, err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable("Comment").Filter("column_id", id).Limit(20).Offset(20 * page).All(&list)
+	_, err = o.QueryTable("Comment").Filter("column_id", id).Limit(20).OrderBy("-Id").Offset(20 * page).All(&list)
+	GetCommentsDetail(uid, list)
 	return
 }
 
@@ -130,17 +131,6 @@ func ColumnUpdatePoet(col *Column, poet *Poet) (add bool, err error) {
 		add = true
 		col.Count = col.Count + 1
 	}
-	_, err = o.Update(col)
-	return
-}
-
-func ColumnAddComment(col *Column, comment *Comment) (err error) {
-	o := orm.NewOrm()
-	if comment.Id == 0 {
-		comment.Column = col
-		_, err = o.Insert(comment)
-	}
-	col.CommentCount = col.CommentCount + 1
 	_, err = o.Update(col)
 	return
 }

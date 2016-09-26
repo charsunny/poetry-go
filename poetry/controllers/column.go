@@ -5,7 +5,6 @@ import (
 	"poetry/models"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -155,7 +154,8 @@ func (c *ColumnController) UpdateColumnItem() {
 func (c *ColumnController) GetColumnComments() {
 	page, _ := c.GetInt("page")
 	cid, _ := c.GetInt("cid")
-	list, err := models.GetColumnComments(page, cid)
+	uid, _ := c.GetInt("uid")
+	list, err := models.GetColumnComments(page, cid, uid)
 	if err != nil {
 		c.ReplyErr(err)
 	} else {
@@ -276,41 +276,5 @@ func (c *ColumnController) DeleteColumn() {
 		c.ReplyErr(err)
 	} else {
 		c.ReplySucc("OK")
-	}
-}
-
-// @Title  add comment
-// @Description update the user
-// @Param	page		query 	int	true		"The page you want to get, default is 0"
-// @Success 200 {object} models.User
-// @Failure 403 :uid is not int
-// @router /addcomment [post]
-func (c *ColumnController) ColumnAddComment() {
-	cid, _ := c.GetInt("cid") // 评论的id
-	id, _ := c.GetInt("id")   // 专辑的id
-	uid, _ := c.GetInt("uid")
-	user, err := models.GetUser(uid)
-
-	content := c.GetString("content")
-
-	col, err := models.GetColumn(id)
-
-	if err != nil {
-		c.ReplyErr(err)
-	} else {
-		comment := new(models.Comment)
-		comment.Content = content
-		comment.Time = time.Now().Format("2006-01-02 15:04:045")
-		if cid > 0 {
-			comment.Comment = &models.Comment{Id: cid}
-		}
-		comment.User = user
-		comment.Column = col
-		err = models.ColumnAddComment(col, comment)
-		if err != nil {
-			c.ReplyErr(err)
-		} else {
-			c.ReplySucc(comment)
-		}
 	}
 }

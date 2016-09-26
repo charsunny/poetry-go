@@ -1,9 +1,10 @@
 package controllers
 
 import (
-    "errors"
-	"strconv"
+	"errors"
 	"poetry/models"
+	"strconv"
+
 	_ "github.com/astaxie/beego"
 )
 
@@ -11,7 +12,6 @@ import (
 type PoemController struct {
 	BaseController
 }
-
 
 // @Title Get
 // @Description get poem by pid
@@ -21,23 +21,23 @@ type PoemController struct {
 // @router /:pid [get]
 func (c *PoemController) Get() {
 	pid := c.Ctx.Input.Param(":pid")
-    haslocal, _ := c.GetBool("local")
-    uid, _ := c.GetInt("uid")
+	haslocal, _ := c.GetBool("local")
+	uid, _ := c.GetInt("uid")
 	if pid != "" {
 		id, _ := strconv.Atoi(pid)
 		p, err := models.GetPoemDetail(id, uid)
-        if haslocal {
-            p.Poet = nil
-            p.TextCn = ""
-        }
-        if err != nil {
-            c.ReplyErr(err)
-        } else {
-            c.ReplySucc(p)
-        }
+		if haslocal {
+			p.Poet = nil
+			p.TextCn = ""
+		}
+		if err != nil {
+			c.ReplyErr(err)
+		} else {
+			c.ReplySucc(p)
+		}
 	} else {
-        c.ReplyErr(errors.New("请求参数错误"))
-    }
+		c.ReplyErr(errors.New("请求参数错误"))
+	}
 }
 
 // @Title Get
@@ -49,13 +49,14 @@ func (c *PoemController) Get() {
 // @router /comments [get]
 func (c *PoemController) GetComments() {
 	pid, _ := c.GetInt("pid")
-    page, _ := c.GetInt("page")
-	list , err := models.GetPoemComments(pid, page)
-    if err != nil {
-        c.ReplyErr(err)
-    } else {
-        c.ReplySucc(list)
-    }
+	page, _ := c.GetInt("page")
+	uid, _ := c.GetInt("uid")
+	list, err := models.GetPoemComments(pid, page, uid)
+	if err != nil {
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(list)
+	}
 }
 
 // @Title Post Like
@@ -67,15 +68,15 @@ func (c *PoemController) GetComments() {
 // @router /like [post]
 func (c *PoemController) LikePoem() {
 	pid, _ := c.GetInt("pid")
-    uid, _ := c.GetInt("uid")
-	fav , err := models.FavPoem(pid, uid)
-    if err != nil {
-        c.ReplyErr(err)
-    } else {
-        if fav {
-            c.ReplySucc("已添加喜欢")
-        }  else {
-            c.ReplySucc("已取消喜欢")
-        }
-    }
+	uid, _ := c.GetInt("uid")
+	fav, err := models.FavPoem(pid, uid)
+	if err != nil {
+		c.ReplyErr(err)
+	} else {
+		if fav {
+			c.ReplySucc("已添加喜欢")
+		} else {
+			c.ReplySucc("已取消喜欢")
+		}
+	}
 }

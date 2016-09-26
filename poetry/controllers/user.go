@@ -143,3 +143,96 @@ func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
 	u.ServeJSON()
 }
+
+// @Title  add comment
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /addcomment [post]
+func (c *UserController) AddComment() {
+	cid, _ := c.GetInt("cid") // 评论的id
+	id, _ := c.GetInt("id")   // 专辑的id
+	uid, _ := c.GetInt("uid")
+	content := c.GetString("content")
+	tp, _ := c.GetInt("type")
+	cm, err := models.AddComment(tp, id, uid, cid, content)
+	if err != nil {
+		beego.Debug(err)
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(cm)
+	}
+}
+
+// @Title  like comment
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /likecomment [post]
+func (c *UserController) LikeComment() {
+	cid, _ := c.GetInt("cid") // 评论的id
+	uid, _ := c.GetInt("uid")
+	cm, err := models.LikeComment(cid, uid)
+	if err != nil {
+		beego.Debug(err)
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(cm)
+	}
+}
+
+// @Title  like comment
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /unlikecomment [post]
+func (c *UserController) DislikeComment() {
+	cid, _ := c.GetInt("cid") // 评论的id
+	uid, _ := c.GetInt("uid")
+	cm, err := models.DislikeComment(cid, uid)
+	if err != nil {
+		beego.Debug(err)
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(cm)
+	}
+}
+
+// @Title  like comment
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /likefeed [post]
+func (c *UserController) LikeFeed() {
+	cid, _ := c.GetInt("cid") // 评论的id
+	uid, _ := c.GetInt("uid")
+	cm, err := models.LikeFeed(cid, uid)
+	if err != nil {
+		beego.Debug(err)
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(cm)
+	}
+}
+
+// @Title  like comment
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /unlikefeed [post]
+func (c *UserController) DislikeFeed() {
+	cid, _ := c.GetInt("cid") // 评论的id
+	uid, _ := c.GetInt("uid")
+	cm, err := models.DislikeFeed(cid, uid)
+	if err != nil {
+		beego.Debug(err)
+		c.ReplyErr(err)
+	} else {
+		c.ReplySucc(cm)
+	}
+}
