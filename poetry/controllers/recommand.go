@@ -3,6 +3,8 @@ package controllers
 import (
 	"errors"
 	"poetry/models"
+	"strconv"
+	"strings"
 )
 
 // Operations about Users
@@ -56,5 +58,44 @@ func (u *RecommandController) GetList() {
 		u.ReplyErr(err)
 	} else {
 		u.ReplySucc(list)
+	}
+}
+
+// @Title  Get Recommand List
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /create [post]
+func (c *RecommandController) CreateRecommend() {
+	uid, err := c.GetInt("uid")
+	if err != nil {
+		c.ReplyErr(err)
+		return
+	}
+	user, err := models.GetUser(uid)
+	if err != nil {
+		c.ReplyErr(err)
+		return
+	}
+	name := c.GetString("name")
+	desc := c.GetString("desc")
+	contents := c.GetString("contents")
+	col := new(models.Recommand)
+	col.Title = name
+	col.Desc = desc
+	col.User = user
+	col, err = models.AddRecommand(col)
+	if err != nil {
+		c.ReplyErr(err)
+	} else {
+		for _, c := range strings.Split(contents, "|") {
+			c = strings.Trim(c, " ")
+			id, _ := strconv.Atoi(c)
+			if id > 0 {
+				models.RecommandUpdatePoem(col, &models.Poem{Id: id})
+			}
+		}
+		c.ReplySucc(col)
 	}
 }

@@ -131,6 +131,10 @@ func (u *UserController) Delete() {
 // @router /info [get]
 func (u *UserController) GetInfo() {
 	uid, _ := u.GetInt("uid")
+	id, _ := u.GetInt("id")
+	if id > 0 {
+		uid = id
+	}
 	beego.Debug(uid)
 	user, err := models.GetUser(uid)
 	if err != nil {

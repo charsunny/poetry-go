@@ -3,6 +3,7 @@ package controllers
 import (
 	"poetry/models"
 	"strconv"
+	"time"
 
 	"github.com/astaxie/beego"
 	//"lib/ysqi/tokenauth"
@@ -87,4 +88,28 @@ func (c *BaseController) UploadPic() {
 	} else {
 		c.ReplyErr(err)
 	}
+}
+
+// @router /search [get]
+func (c *BaseController) GetSearchIndex() {
+	pnames := []string{"李白", "杜甫", "苏轼", "白居易", "李清照", "李商隐", "杜牧", "柳永"}
+	var poets []*models.Poet
+	for _, name := range pnames {
+		p, err := models.GetPoetByName(name)
+		if err == nil {
+			poets = append(poets, p)
+		}
+	}
+	day := int(time.Now().Unix() / (3600 * 24))
+	poem, err := models.GetPoemByRow(day % 50000)
+	poet, err := models.GetPoetByRow(day % 2000)
+	format, err := models.GetPoemFormatByRow(day % 170)
+	beego.Debug(err)
+	c.ReplySucc(map[string]interface{}{
+		"poets":  poets,
+		"poem":   poem,
+		"poet":   poet,
+		"format": format,
+	})
+
 }

@@ -34,3 +34,15 @@ func GetPoet(pid int) (p *Poet, err error) {
 	err = orm.NewOrm().Read(p)
 	return
 }
+
+func GetPoetByName(name string) (p *Poet, err error) {
+	p = new(Poet)
+	err = orm.NewOrm().QueryTable("Poet").Filter("NameCn", name).One(p)
+	return
+}
+
+func GetPoetByRow(id int) (p *Poet, err error) {
+	p = new(Poet)
+	err = orm.NewOrm().QueryTable("Poet").Limit(1).Offset(id).One(p)
+	return
+}

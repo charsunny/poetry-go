@@ -39,16 +39,16 @@ type User struct {
 	RongUser      string // rongyun用户名
 	RongToken     string // rong token
 	// Relations
-	Feeds        []*Feed    `orm:"reverse(many)"`
-	Columns      []*Column  `orm:"reverse(many)"  json:",omitempty"`
-	LikeFeeds    []*Feed    `orm:"rel(m2m)"  json:",omitempty"`
-	LikePoems    []*Poem    `orm:"rel(m2m)"  json:",omitempty"`
-	LikePoets    []*Poet    `orm:"rel(m2m)"  json:",omitempty"`
-	LikeColumns  []*Column  `orm:"rel(m2m)"  json:",omitempty"`
-	LikeComments []*Comment `orm:"rel(m2m)"  json:"-"`
-	Comments     []*Comment `orm:"reverse(many)"`
-	Messages     []*Message `orm:"reverse(many)"`
-
+	Feeds        []*Feed      `orm:"reverse(many)"`
+	Columns      []*Column    `orm:"reverse(many)"  json:",omitempty"`
+	LikeFeeds    []*Feed      `orm:"rel(m2m)"  json:",omitempty"`
+	LikePoems    []*Poem      `orm:"rel(m2m)"  json:",omitempty"`
+	LikePoets    []*Poet      `orm:"rel(m2m)"  json:",omitempty"`
+	LikeColumns  []*Column    `orm:"rel(m2m)"  json:",omitempty"`
+	LikeComments []*Comment   `orm:"rel(m2m)"  json:"-"`
+	Comments     []*Comment   `orm:"reverse(many)"`
+	Messages     []*Message   `orm:"reverse(many)"`
+	Recommands   []*Recommand `orm:"reverse(many)" json:"-"`
 	// dont show
 	RelMessage *Message `orm:"reverse(one)" json:"-"`
 }

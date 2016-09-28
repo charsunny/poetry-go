@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	orm.RegisterModel(new(Poem))
+	orm.RegisterModel(new(Poem), new(PoemFormat))
 	beego.Debug("init model poem")
 }
 
@@ -29,10 +29,37 @@ type Poem struct {
 	Excerpts     []*Excerpt   `orm:"reverse(many)" json:"-"`          // 关联的摘抄
 }
 
+type PoemFormat struct {
+	Id     int
+	NameCn string `json:"Name"`
+	Desc   string `orm:"column(description_cn)"`
+}
+
 func GetPoem(pid int) (p *Poem, err error) {
 	p = new(Poem)
 	p.Id = pid
 	err = orm.NewOrm().Read(p)
+	return
+}
+
+func GetPoemByRow(id int) (p *Poem, err error) {
+	p = new(Poem)
+	o := orm.NewOrm()
+	err = o.QueryTable("Poem").Limit(1).Offset(id).One(p)
+	o.LoadRelated(p, "Poet")
+	return
+}
+
+func GetPoemFormat(id int) (p *PoemFormat, err error) {
+	p = new(PoemFormat)
+	p.Id = id
+	err = orm.NewOrm().Read(p)
+	return
+}
+
+func GetPoemFormatByRow(id int) (p *PoemFormat, err error) {
+	p = new(PoemFormat)
+	err = orm.NewOrm().QueryTable("PoemFormat").Limit(1).Offset(id).One(p)
 	return
 }
 

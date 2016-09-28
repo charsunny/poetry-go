@@ -20,6 +20,13 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["poetry/controllers:BaseController"] = append(beego.GlobalControllerRouter["poetry/controllers:BaseController"],
+		beego.ControllerComments{
+			Method: "GetSearchIndex",
+			Router: `/search`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["poetry/controllers:ColumnController"] = append(beego.GlobalControllerRouter["poetry/controllers:ColumnController"],
 		beego.ControllerComments{
 			Method: "GetColumn",
@@ -207,6 +214,13 @@ func init() {
 			Method: "GetList",
 			Router: `/list`,
 			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["poetry/controllers:RecommandController"] = append(beego.GlobalControllerRouter["poetry/controllers:RecommandController"],
+		beego.ControllerComments{
+			Method: "CreateRecommend",
+			Router: `/create`,
+			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["poetry/controllers:UserController"] = append(beego.GlobalControllerRouter["poetry/controllers:UserController"],
