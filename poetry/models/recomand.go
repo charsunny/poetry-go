@@ -32,6 +32,7 @@ func GetRecommand(id int) (rec *Recommand, err error) {
 		err = o.QueryTable("Recommand").Filter("Publish", true).OrderBy("-Id").Limit(1).One(rec)
 	}
 	o.LoadRelated(rec, "Poems")
+	o.LoadRelated(rec, "User")
 	if rec.Poems != nil {
 		var pids []interface{}
 		for _, poem := range rec.Poems {

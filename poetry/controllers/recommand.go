@@ -5,6 +5,7 @@ import (
 	"poetry/models"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Operations about Users
@@ -85,6 +86,7 @@ func (c *RecommandController) CreateRecommend() {
 	col.Title = name
 	col.Desc = desc
 	col.User = user
+	col.Time = time.Now().Format("2006年01月02日") + " " + time.Now().Weekday().String()
 	col, err = models.AddRecommand(col)
 	if err != nil {
 		c.ReplyErr(err)
