@@ -22,7 +22,7 @@ const (
 func init() {
 	UserList = make(map[string]*User)
 	orm.RegisterModel(new(User), new(Comment), new(Feed))
-	rcServer, _ = RCServerSDK.NewRCServer("8w7jv4qb77vey", "UNIDKJuSiB", "json")
+	rcServer, _ = RCServerSDK.NewRCServer("82hegw5uhhgfx", "7gesMe5LmqYS", "json")
 }
 
 type User struct {
@@ -58,9 +58,9 @@ func AddUser(u *User) bool {
 	ct, _ := o.QueryTable("User").Filter("UserId", u.UserId).Count()
 	if ct == 0 {
 		o.Insert(u)
-		return true
+	} else {
+		o.QueryTable("User").Filter("UserId", u.UserId).One(u)
 	}
-	o.QueryTable("User").Filter("UserId", u.UserId).One(u)
 	if len(u.RongUser) == 0 || len(u.RongToken) == 0 {
 		str, err := rcServer.UserGetToken(strconv.Itoa(u.Id), u.Nick, u.Avatar)
 		if err == nil {
@@ -81,7 +81,22 @@ func AddUser(u *User) bool {
 func GetUser(uid int) (u *User, err error) {
 	u = new(User)
 	u.Id = uid
-	err = orm.NewOrm().Read(u)
+	o := orm.NewOrm()
+	err = o.Read(u)
+	if len(u.RongUser) == 0 || len(u.RongToken) == 0 {
+                str, err := rcServer.UserGetToken(strconv.Itoa(u.Id), u.Nick, u.Avatar)
+                if err == nil {
+                        var data struct {
+                                Code   int
+                                Token  string
+                                UserId string `json:"userId"`
+                        }
+                        json.Unmarshal(str, &data)
+                        u.RongUser = strconv.Itoa(u.Id)
+                        u.RongToken = data.Token
+                        o.Update(u)
+                }
+        }
 	return
 }
 
