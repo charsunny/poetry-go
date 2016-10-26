@@ -77,12 +77,26 @@ func (c *FeedController) GetFeedFavUsers() {
 // @Failure 403 :uid is not int
 // @router /delete [post]
 func (c *FeedController) DeleteFeed() {
-	id, _ := c.GetInt("id")
+	id, _ := c.GetInt("fid")
 	uid, _ := c.GetInt("uid")
-	err := models.DeleteColumn(id, uid)
+	err := models.DeleteFeed(id, uid)
 	if err != nil {
 		c.ReplyErr(err)
 	} else {
 		c.ReplySucc("OK")
 	}
+}
+
+// @Title  Get Recommand List
+// @Description update the user
+// @Param	page		query 	int	true		"The page you want to get, default is 0"
+// @Success 200 {object} models.User
+// @Failure 403 :uid is not int
+// @router /report [post]
+func (c *FeedController) ReportFeed() {
+	id, _ := c.GetInt("fid")
+	feed, _ := models.GetFeed(id)
+	feed.ReportCount = feed.ReportCount + 1
+	models.UpdateFeed(feed)
+	c.ReplySucc("OK")
 }

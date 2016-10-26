@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -21,7 +22,9 @@ type Feed struct {
 	Poem         *Poem `orm:"rel(fk)"`
 	LikeCount    int
 	CommentCount int
+	ReportCount  int        `json:"-"`
 	IsFav        bool       `orm:"-"`
+	Delete       bool       `json:"-"`
 	LikeUsers    []*User    `orm:"reverse(many)" json:"-"`
 	Comments     []*Comment `orm:"reverse(many)" json:"-"`
 	Messages     []*Message `orm:"reverse(many)" json:"-"`
@@ -31,6 +34,25 @@ func GetFeed(fid int) (p *Feed, err error) {
 	p = new(Feed)
 	p.Id = fid
 	err = orm.NewOrm().Read(p)
+	return
+}
+
+func UpdateFeed(feed *Feed) {
+	orm.NewOrm().Update(feed)
+}
+
+func DeleteFeed(id, uid int) (err error) {
+	col, err := GetFeed(id)
+	beego.Debug("获取feed失败", id)
+	if err == nil {
+		if col.User.Id != uid {
+			err = errors.New("不能删除不是自己的专辑")
+			beego.Debug("删除失败")
+		} else {
+			col.Delete = true
+		}
+	}
+	orm.NewOrm().Update(col)
 	return
 }
 
@@ -47,7 +69,7 @@ func AddFeed(uid, pid int, content string, image string) (feed *Feed, err error)
 
 func GetFeeds(uid, page int) (list []*Feed, err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable("Feed").OrderBy("-Time").Limit(20).Offset(page * 20).All(&list)
+	_, err = o.QueryTable("Feed").OrderBy("-Time").Filter("Delete", false).Limit(20).Offset(page * 20).All(&list)
 	for _, f := range list {
 		o.LoadRelated(f, "Poem")
 		if f.Poem != nil && len(f.Poem.TextCn) > 200 {
@@ -71,7 +93,7 @@ func GetFeedComments(page int, id int, uid int) (list []*Comment, err error) {
 
 func GetFeedsAfter(fid int) (list []*Feed, err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable("Feed").OrderBy("-Time").Filter("id__gt", fid).All(&list)
+	_, err = o.QueryTable("Feed").OrderBy("-Time").Filter("Delete", false).Filter("id__gt", fid).All(&list)
 	for _, f := range list {
 		o.LoadRelated(f, "Poem")
 		if f.Poem != nil && len(f.Poem.TextCn) > 200 {
@@ -85,7 +107,7 @@ func GetFeedsAfter(fid int) (list []*Feed, err error) {
 
 func GetUserFeeds(uid int, page int) (list []*Feed, err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable("Feed").Filter("user_id", uid).OrderBy("-Time").Limit(20).Offset(page * 20).All(&list)
+	_, err = o.QueryTable("Feed").Filter("Delete", false).Filter("user_id", uid).OrderBy("-Time").Limit(20).Offset(page * 20).All(&list)
 	for _, f := range list {
 		o.LoadRelated(f, "Poem")
 		if f.Poem != nil && len(f.Poem.TextCn) > 200 {
@@ -99,7 +121,7 @@ func GetUserFeeds(uid int, page int) (list []*Feed, err error) {
 
 func GetUserFeedsAfter(uid int, fid int) (list []*Feed, err error) {
 	o := orm.NewOrm()
-	_, err = o.QueryTable("Feed").Filter("user_id", uid).OrderBy("-Time").Filter("id__gt", fid).All(&list)
+	_, err = o.QueryTable("Feed").Filter("Delete", false).Filter("user_id", uid).OrderBy("-Time").Filter("id__gt", fid).All(&list)
 	for _, f := range list {
 		o.LoadRelated(f, "Poem")
 		if f.Poem != nil && len(f.Poem.TextCn) > 200 {

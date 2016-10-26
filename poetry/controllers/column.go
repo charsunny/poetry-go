@@ -44,7 +44,7 @@ func (c *ColumnController) GetColumn() {
 // @Failure 403 :uid is empty
 // @router /user [get]
 func (c *ColumnController) GetUserColumns() {
-	uid, _ := c.GetInt("uid")
+	uid, _ := c.GetInt("id")
 	list, _, err := models.GetUserColumns(uid)
 	if err != nil {
 		c.ReplyErr(err)
